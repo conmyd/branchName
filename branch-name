@@ -1,17 +1,17 @@
 #!/bin/bash
 
 version=$(cat <<- EOF
-make-tag v1.0.0
+branch-name v1.0.0
 EOF
 )
 
 help=$(cat <<- EOF
-make-tag : Make a tag in kebab-case for using as a branch name in git.
+branch-name : Make a tag in kebab-case for using as a branch name in git.
 
 USAGE:
 -----
 
-make-tag [OPTION] [TASK_NAME]
+branch-name [OPTION] [TASK_NAME]
 
 OPTIONS:
 
