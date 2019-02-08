@@ -1,0 +1,75 @@
+#!/bin/bash
+
+version=$(cat <<- EOF
+make-tag v1.0.0
+EOF
+)
+
+help=$(cat <<- EOF
+make-tag : Make a tag in kebab-case for using as a branch name in git.
+
+USAGE:
+-----
+
+make-tag [OPTION] [TASK_NAME]
+
+OPTIONS:
+
+-v | --version : Print the version number
+-h | --help    : Print this message
+-b | --bugfix  : Prepend the output with a directory of bugfix/
+-t | --task    : Prepend the output with a directory of task/
+-f | --feature : Prepend the output with a directory of feature/
+
+TASK_NAME: Can be any number of extra arguments. Each one will be kebab-cased onto the resulting output.
+EOF
+)
+
+
+while [[ "$1" =~ ^- && ! "$1" == "--" ]]; do case $1 in
+	-v | --version )
+		echo "$version"
+		exit
+		;;
+	-h | --help )
+		echo "$help"
+		exit
+		;;
+	-d | --debug )
+		debug=1
+		;;
+	-b | --bugfix )
+		bugfix=1
+		;;
+	-t | --task )
+		task=1
+		;;
+	-f | --feature )
+		feature=1
+	;;
+esac; shift; done
+
+if [[ "$1" == '--' ]]; then shift; fi
+
+if [[ -n "$debug" ]]; then
+	echo "feature:$feature"
+	echo "bugfix:$bugfix"
+	echo "task:$task"
+fi
+
+# Using priority order of tags so that there will always only be one of them.
+if [[ -n "$feature" ]]; then
+	output="feature/"
+elif [[ -n "$bugfix" ]]; then
+	output="bugfix/"
+elif [[ -n "$task" ]]; then
+	output="task/"
+else
+	output=""
+fi
+while [[ $1 ]]; do
+	output="$output$1-"
+	shift
+done
+
+echo ${output::-1}
