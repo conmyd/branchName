@@ -67,8 +67,9 @@ elif [[ -n "$task" ]]; then
 else
 	output=""
 fi
-while [[ $1 ]]; do
-	output="$output$1-"
+while [[ -n "$1" ]]; do
+	safe_word=`echo "$1" | tr -dc '[:alnum:]'`
+	output="$output$safe_word-"
 	shift
 done
 
